@@ -8,18 +8,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import random
 
 app = Flask(__name__)
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load environment variables
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_HOST = os.environ.get("DB_HOST", "localhost")  # Default to localhost if not set
-
+DB_USER = os.environ.get("DB_USER", "admin")  # Default to "admin" if DB_USER is not set
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "RamyaRani2005")  # Default to "RamyaRani2005" if not set
+DB_HOST = os.environ.get("DB_HOST", "localhost")  # Default to "localhost" if not set
+DB_NAME = os.environ.get("DB_NAME", "stocker")  # Default to "stocker" if not set
+ALPHA_VANTAGE_API_KEY = os.environ.get("ALPHA_VANTAGE_API_KEY", "4QITL9CQJ51G81D2")  # Default API key
 
 # Configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.environ.get("DB_USER")}:{os.environ.get("DB_PASSWORD")}@{os.environ.get("DB_HOST", "localhost")}/stocker'  
-app.config['SECRET_KEY'] = 'your_secret_key_here'  # Replace with a real secret key
-ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY', '4QITL9CQJ51G81D2')
-
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "your_secret_key_here")  # Replace with a real secret key
 
 # Initialize extensions
 db = SQLAlchemy(app)
